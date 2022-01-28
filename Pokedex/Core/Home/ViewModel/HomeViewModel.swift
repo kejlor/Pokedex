@@ -10,10 +10,10 @@ import Combine
 
 class HomeViewModel: ObservableObject {
     
-    @Published var allPokemons: [PokedexModel] = []
+    @Published var allPokemons: [PokemonModel] = []
     @Published var searchText = ""
     
-    private let pokedexDataService = PokedexDataService()
+    private let pokemonDataService = PokemonDataService()
     private var anyCancellables = Set<AnyCancellable>()
     
     init() {
@@ -24,28 +24,28 @@ class HomeViewModel: ObservableObject {
         
         // update allPokemons
         $searchText
-            .combineLatest(pokedexDataService.$allPokemons)
-            .map(filterPokemons)
+            .combineLatest(pokemonDataService.$allPokemons)
+//            .map(filterPokemons)
             .sink { [weak self] (returnedPokemons) in
                 self?.allPokemons = returnedPokemons
             }
             .store(in: &anyCancellables)
     }
         
-    private func filterPokemons(text: String, pokemons: [PokedexModel]) -> [PokedexModel] {
-        guard !text.isEmpty else {
-            return pokemons
-        }
-        
-        let lowercasedText = text.lowercased()
-        
-        return pokemons.filter { (pokemon) -> Bool in
-            return pokemon.name.lowercased().contains(lowercasedText) ||
-            pokemon.url.lowercased().contains(lowercasedText)
-        }
-    }
+//    private func filterPokemons(text: String, pokemons: [PokemonModel]) -> [PokemonModel] {
+//        guard !text.isEmpty else {
+//            return pokemons
+//        }
+//
+//        let lowercasedText = text.lowercased()
+//
+//        return pokemons.filter { (pokemon) -> Bool in
+//            return pokemon.name.lowercased().contains(lowercasedText) ||
+//            pokemon.url.lowercased().contains(lowercasedText)
+//        }
+//    }
     
     func reloadData() {
-        pokedexDataService.getPokemons()
+        pokemonDataService.getPokemons()
     }
 }

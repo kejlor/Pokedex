@@ -8,9 +8,9 @@
 import Foundation
 import Combine
 
-class PokedexDataService {
+class PokemonDataService {
     
-    @Published var allPokemons: [PokedexModel] = []
+    @Published var allPokemons: [PokemonModel] = []
     
     private var anyCancellables = Set<AnyCancellable>()
     
@@ -23,7 +23,7 @@ class PokedexDataService {
         print("getting pokemons")
         
         NetworkingManager.download(url: url)
-            .decode(type: [PokedexModel].self, decoder: JSONDecoder())
+            .decode(type: [PokemonModel].self, decoder: JSONDecoder())
             .sink(receiveCompletion: NetworkingManager.handleCompletion, receiveValue: { [weak self] (returnedPokemons) in
                 self?.allPokemons = returnedPokemons
             })
