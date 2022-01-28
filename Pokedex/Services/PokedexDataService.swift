@@ -12,7 +12,7 @@ class PokedexDataService {
     
     @Published var allPokemons: [PokedexModel] = []
     
-    var pokedexSubscription: AnyCancellable?
+    private var anyCancellables = Set<AnyCancellable>()
     
     init() {
         getPokemons()
@@ -22,11 +22,11 @@ class PokedexDataService {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=151") else { return }
         print("getting pokemons")
         
-        pokedexSubscription = NetworkingManager.download(url: url)
+        NetworkingManager.download(url: url)
             .decode(type: [PokedexModel].self, decoder: JSONDecoder())
             .sink(receiveCompletion: NetworkingManager.handleCompletion, receiveValue: { [weak self] (returnedPokemons) in
                 self?.allPokemons = returnedPokemons
-                self?.pokedexSubscription?.cancel()
             })
+            .store(in: &anyCancellables)
     }
 }
