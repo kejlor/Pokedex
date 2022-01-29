@@ -24,7 +24,9 @@ import Foundation
  */
 
 struct PokedexModel: Identifiable, Codable {
-    var id = UUID()
+    var id: UUID {
+        return UUID()
+    }
     let name: String
     let url: String
 }

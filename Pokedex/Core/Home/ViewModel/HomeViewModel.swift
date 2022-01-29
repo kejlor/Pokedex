@@ -10,7 +10,7 @@ import Combine
 
 class HomeViewModel: ObservableObject {
     
-    @Published var allPokemons: [PokemonModel] = []
+    @Published var allPokemons: [PokedexModel] = []
     @Published var searchText = ""
     
     private let pokemonDataService = PokemonDataService()
@@ -25,25 +25,26 @@ class HomeViewModel: ObservableObject {
         // update allPokemons
         $searchText
             .combineLatest(pokemonDataService.$allPokemons)
-//            .map(filterPokemons)
+            .map(filterPokemons)
             .sink { [weak self] (returnedPokemons) in
                 self?.allPokemons = returnedPokemons
             }
             .store(in: &anyCancellables)
     }
+    
+    private func filterPokemons(text: String, pokemons: PokemonModel) -> [PokedexModel] {
+        guard !text.isEmpty else {
+            return pokemons.results
+        }
         
-//    private func filterPokemons(text: String, pokemons: [PokemonModel]) -> [PokemonModel] {
-//        guard !text.isEmpty else {
-//            return pokemons
-//        }
-//
-//        let lowercasedText = text.lowercased()
-//
-//        return pokemons.filter { (pokemon) -> Bool in
-//            return pokemon.name.lowercased().contains(lowercasedText) ||
-//            pokemon.url.lowercased().contains(lowercasedText)
-//        }
-//    }
+        let lowercasedText = text.lowercased()
+        let pokedexModels = pokemons.results
+        
+        return pokedexModels.filter { (pokemon) -> Bool in
+            return pokemon.name.lowercased().contains(lowercasedText) ||
+            pokemon.url.lowercased().contains(lowercasedText)
+        }
+    }
     
     func reloadData() {
         pokemonDataService.getPokemons()

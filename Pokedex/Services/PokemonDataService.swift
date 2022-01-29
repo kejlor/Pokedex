@@ -10,9 +10,9 @@ import Combine
 
 class PokemonDataService {
     
-    @Published var allPokemons: [PokemonModel] = []
+    @Published var allPokemons = PokemonModel(results: [PokedexModel]())
     
-    private var anyCancellables = Set<AnyCancellable>()
+    var pokemonSubscription: AnyCancellable?
     
     init() {
         getPokemons()
@@ -22,11 +22,11 @@ class PokemonDataService {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=151") else { return }
         print("getting pokemons")
         
-        NetworkingManager.download(url: url)
-            .decode(type: [PokemonModel].self, decoder: JSONDecoder())
+        pokemonSubscription = NetworkingManager.download(url: url)
+            .decode(type: PokemonModel.self, decoder: JSONDecoder())
             .sink(receiveCompletion: NetworkingManager.handleCompletion, receiveValue: { [weak self] (returnedPokemons) in
                 self?.allPokemons = returnedPokemons
+                self?.pokemonSubscription?.cancel()
             })
-            .store(in: &anyCancellables)
     }
 }
