@@ -20,7 +20,6 @@ class PokemonDataService {
     
     func getPokemons() {
         guard let url = URL(string: "https://pokeapi.co/api/v2/pokemon?limit=151") else { return }
-        print("getting pokemons")
         
         pokemonSubscription = NetworkingManager.download(url: url)
             .decode(type: PokemonModel.self, decoder: JSONDecoder())
