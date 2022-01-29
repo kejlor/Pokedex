@@ -14,6 +14,8 @@ struct PokedexRowView: View {
     var body: some View {
         HStack {
             Text(pokedexEntry.name)
+            Spacer()
+            PokemonSpriteView(pokedexEntry: pokedexEntry)
         }
     }
 }
