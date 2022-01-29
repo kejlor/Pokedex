@@ -7,6 +7,9 @@
 
 import Foundation
 
-struct PokemonDetailsModel: Codable {
+struct PokemonDetailsModel: Codable, Identifiable {
+    var id: UUID {
+        return UUID()
+    }
     var sprite: PokemonSpritesModel
 }

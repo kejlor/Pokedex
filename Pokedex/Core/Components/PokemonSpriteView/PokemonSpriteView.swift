@@ -17,13 +17,10 @@ struct PokemonSpriteView: View {
     
     var body: some View {
         ZStack {
-            if let spriteURL = URL(string: vm.pokemonDetails?.frontDefault ?? "") {
-                AsyncImage(url: spriteURL) { image in
-                    image.resizable()
-                } placeholder: {
-                    ProgressView()
-                }
-                .frame(width: 50, height: 50)
+            if let image = vm.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
             } else {
                 Image(systemName: "questionmark")
             }

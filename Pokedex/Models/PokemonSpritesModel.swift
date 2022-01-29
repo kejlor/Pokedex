@@ -7,8 +7,11 @@
 
 import Foundation
 
-struct PokemonSpritesModel: Codable {
-    var frontDefault: String?
+struct PokemonSpritesModel: Codable, Identifiable {
+    var id: UUID {
+        return UUID()
+    }
+    var frontDefault: String
     
     enum CodingKeys: String, CodingKey {
         case frontDefault = "front_default"

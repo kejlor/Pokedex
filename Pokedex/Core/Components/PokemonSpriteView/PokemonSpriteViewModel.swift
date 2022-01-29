@@ -7,10 +7,11 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 class PokemonSpriteViewModel: ObservableObject {
     
-    @Published var pokemonDetails: PokemonSpritesModel? = nil
+    @Published var image: UIImage? = nil
     
     private let pokedexEntry: PokedexModel
     private let dataService: PokemonDetailService
@@ -23,11 +24,11 @@ class PokemonSpriteViewModel: ObservableObject {
     }
     
     private func addSubscribers() {
-        dataService.$spriteURL
+        dataService.$image
             .sink { [weak self] (_) in
                 
-            } receiveValue: { [weak self] (returnedPokemonDetail) in
-                self?.pokemonDetails = returnedPokemonDetail
+            } receiveValue: { [weak self] (returnedImage) in
+                self?.image = returnedImage
             }
             .store(in: &cancellables)
     }
