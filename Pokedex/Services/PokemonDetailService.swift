@@ -17,6 +17,7 @@ class PokemonDetailService {
     
     init(pokedexEntry: PokedexModel) {
         self.pokedexEntry = pokedexEntry
+        getSprite()
     }
     
 //    func getSprite(url: String, completion:@escaping (PokemonSpritesModel) -> ()) {
@@ -35,7 +36,6 @@ class PokemonDetailService {
     
     private func getSprite() {
         guard let url = URL(string: pokedexEntry.url) else { return }
-        
         linkSubscription = NetworkingManager.download(url: url)
             .decode(type: PokemonDetailsModel.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
