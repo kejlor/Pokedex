@@ -10,7 +10,7 @@ import Combine
 
 class PokemonSpriteViewModel: ObservableObject {
     
-    @Published var pokemonDetails: PokemonDetailsModel? = nil
+    @Published var pokemonDetails: PokemonSpritesModel? = nil
     
     private let pokedexEntry: PokedexModel
     private let dataService: PokemonDetailService

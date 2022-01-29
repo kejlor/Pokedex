@@ -10,7 +10,7 @@ import Combine
 
 class PokemonDetailService {
     
-    @Published var spriteURL: PokemonDetailsModel? = nil
+    @Published var spriteURL: PokemonSpritesModel? = nil
     
     private var linkSubscription: AnyCancellable?
     private let pokedexEntry: PokedexModel
@@ -36,12 +36,14 @@ class PokemonDetailService {
     
     private func getSprite() {
         guard let url = URL(string: pokedexEntry.url) else { return }
+        print("getting spriteszz")
         linkSubscription = NetworkingManager.download(url: url)
-            .decode(type: PokemonDetailsModel.self, decoder: JSONDecoder())
+            .decode(type: PokemonSpritesModel.self, decoder: JSONDecoder())
             .receive(on: DispatchQueue.main)
             .sink(receiveCompletion: NetworkingManager.handleCompletion, receiveValue: { [weak self] (returnedSpriteURL) in
-                self?.spriteURL = returnedSpriteURL
-                self?.linkSubscription?.cancel()
+                guard let self = self, let downloadedSprite = returnedSpriteURL.frontDefault else { return }
+                self.spriteURL?.frontDefault = downloadedSprite
+                self.linkSubscription?.cancel()
             })
     }
 }

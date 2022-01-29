@@ -17,7 +17,7 @@ struct PokemonSpriteView: View {
     
     var body: some View {
         ZStack {
-            if let spriteURL = URL(string: vm.pokemonDetails?.sprite.frontDefault ?? "") {
+            if let spriteURL = URL(string: vm.pokemonDetails?.frontDefault ?? "") {
                 AsyncImage(url: spriteURL) { image in
                     image.resizable()
                 } placeholder: {
